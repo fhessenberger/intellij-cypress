@@ -80,8 +80,9 @@ class CypressRunState(private val myEnv: ExecutionEnvironment, private val myRun
         if (workingDirectory.isNotBlank()) {
             commandLine.withWorkDirectory(workingDirectory)
         }
-        NodeCommandLineUtil.configureUsefulEnvironment(commandLine)
-        commandLine.withParameters(NodePackage.findDefaultPackage(myProject, "cypress", interpreter)!!.systemDependentPath + "/bin/cypress", "run")
+
+        commandLine.withParameters("cypress", "run")
+
         if (data.additionalParams.isNotBlank()) {
             commandLine.withParameters(data.additionalParams.trim().split("\\s+".toRegex()))
         }
@@ -104,7 +105,9 @@ class CypressRunState(private val myEnv: ExecutionEnvironment, private val myRun
             }
 //            CypressRunConfig.TestKind.SUITE -> TODO("not implemented")
         }
-        NodeCommandLineConfigurator.find(interpreter).configure(commandLine)
+
+        commandLine.withExePath("/usr/local/bin/npx")
+
         return onlyFile
     }
 
